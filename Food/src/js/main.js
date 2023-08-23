@@ -103,6 +103,7 @@ window.addEventListener('DOMContentLoaded', function() {
     for (const modal of modalTriggers){
         modal.addEventListener('click', () => {
             openModalWindow();
+            clearInterval(modalTimerId);
         });
     }   
 
@@ -132,5 +133,15 @@ window.addEventListener('DOMContentLoaded', function() {
         document.body.style.overflow = '';
     }
 
+    const modalTimerId = setTimeout(openModalWindow, 3000);
+
+    function showModalByScroll(){
+        if(window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
+            openModalWindow()
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    }
+
+    window.addEventListener('scroll', showModalByScroll);
 
 });
