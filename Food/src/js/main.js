@@ -39,7 +39,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     //Timer
 
-    const deadline = '2023-08-25';
+    const deadline = '2023-08-26';
 
     function getTimeRemaining(endtime){
         const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -133,7 +133,7 @@ window.addEventListener('DOMContentLoaded', function() {
         document.body.style.overflow = '';
     }
 
-    const modalTimerId = setTimeout(openModalWindow, 3000);
+    //const modalTimerId = setTimeout(openModalWindow, 3000);
 
     function showModalByScroll(){
         if(window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
@@ -143,5 +143,68 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     window.addEventListener('scroll', showModalByScroll);
+
+    //work with class for cards
+
+    class Card{
+        constructor(title, photo, alt, description, price, parentSelector){
+            this.title = title;
+            this.photo = photo;
+            this.alt = alt;
+            this.description = description;
+            this.price = price;
+            this.parent = document.querySelector(parentSelector);
+            this.transfer = 36.95;
+            this.changeToUAN();
+        }
+
+        changeToUAN(){
+            this.price = this.price * this.transfer;
+        }
+
+        createCard() {
+            const element = document.createElement('div');
+            element.innerHTML = `
+            <div class="menu__item">
+                <img src="${this.photo}" alt="${this.alt}">
+                <h3 class="menu__item-subtitle">${this.title}</h3>
+                <div class="menu__item-descr">${this.description}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+                </div>
+            </div>`;
+            this.parent.append(element);
+        }
+    }
+
+    const title = 'Меню Жабы Клавы';
+    const photo = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgplcu-8Y0_o_T9alkBZ5E56_KrU2cU0s9hVawMSEd6TVJUnuwAaaXdAGP4sXiqFrDAWc&usqp=CAU';
+    const alt = 'Тут должна быть фотка';
+    const description = 'Меню Жабы Клавы самое вкусное и полезное. Его рекомендуют даже маленьким детям, потому что в нем много полезных витаминов, это самое главное для любого человека';
+    const price = 130;
+    const parentSelector = '.menu .container';
+    const newCard = new Card(title, photo, alt, description, price, parentSelector);
+    newCard.createCard();
+
+    new Card(
+        'Меню "Фитнес"',
+        "img/tabs/vegy.jpg",
+        "vegy",
+        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+        150,
+        '.menu .container'
+    ).createCard();
+
+    new Card(
+        'Меню “Премиум”',
+        "img/tabs/elite.jpg",
+        "elite",
+        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+        10,
+        '.menu .container'
+    ).createCard();
+    
 
 });
