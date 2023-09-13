@@ -144,11 +144,11 @@ window.addEventListener('DOMContentLoaded', function() {
     //work with class for cards
 
     class Card{
-        constructor(title, photo, alt, description, price, parentSelector){
+        constructor(img, altimg, title, descr, price, parentSelector){
+            this.img = img;
+            this.altimg = altimg;
             this.title = title;
-            this.photo = photo;
-            this.alt = alt;
-            this.description = description;
+            this.descr = descr;
             this.price = price;
             this.parent = document.querySelector(parentSelector);
             this.transfer = 36.95;
@@ -163,9 +163,9 @@ window.addEventListener('DOMContentLoaded', function() {
             const element = document.createElement('div');
             element.innerHTML = `
             <div class="menu__item">
-                <img src="${this.photo}" alt="${this.alt}">
+                <img src="${this.img}" alt="${this.altimg}">
                 <h3 class="menu__item-subtitle">${this.title}</h3>
-                <div class="menu__item-descr">${this.description}</div>
+                <div class="menu__item-descr">${this.descr}</div>
                 <div class="menu__item-divider"></div>
                 <div class="menu__item-price">
                     <div class="menu__item-cost">Цена:</div>
@@ -174,35 +174,26 @@ window.addEventListener('DOMContentLoaded', function() {
             </div>`;
             this.parent.append(element);
         }
+    };
+
+    const getResource = async (url) => {
+        const res = await fetch(url);
+
+        if(!res.ok){
+            throw new Error('Ошибка');
+        }
+
+        return await res.json();
     }
 
-    const title = 'Меню Жабы Клавы';
-    const photo = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgplcu-8Y0_o_T9alkBZ5E56_KrU2cU0s9hVawMSEd6TVJUnuwAaaXdAGP4sXiqFrDAWc&usqp=CAU';
-    const alt = 'Тут должна быть фотка';
-    const description = 'Меню Жабы Клавы самое вкусное и полезное. Его рекомендуют даже маленьким детям, потому что в нем много полезных витаминов, это самое главное для любого человека';
-    const price = 130;
-    const parentSelector = '.menu .container';
-    const newCard = new Card(title, photo, alt, description, price, parentSelector);
-    newCard.createCard();
+    getResource('http://localhost:3000/menu ')
+        .then(data => {
+            data.forEach(({img, altimg, title, descr, price}) => {
+                new Card(img, altimg, title, descr, price, '.menu .container').createCard();
+            });
+        });
 
-    new Card(
-        'Меню "Фитнес"',
-        "img/tabs/vegy.jpg",
-        "vegy",
-        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-        150,
-        '.menu .container'
-    ).createCard();
-
-    new Card(
-        'Меню “Премиум”',
-        "img/tabs/elite.jpg",
-        "elite",
-        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-        10,
-        '.menu .container'
-    ).createCard();
-
+        
     //Forms, work with backend, receipt data from forms
     
     const forms = document.querySelectorAll('form');
@@ -214,10 +205,22 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     })
 
-    function postData(form){
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=utf-8'
+            },
+            body: data
+        });
+
+        return await res.json();
+    }
+
+    function bindPostData(form){
         form.addEventListener('submit', (e)=> {
             e.preventDefault();
 
@@ -232,19 +235,9 @@ window.addEventListener('DOMContentLoaded', function() {
 
             const formData = new FormData(form);
 
-            const object = {};
-            formData.forEach(function(value, key){
-                object[key] = value;
-            });
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-            fetch('server.php', {
-                method: "POST",
-                body: JSON.stringify(object),
-                headers: {
-                    'Content-type': 'application/json; charset=utf-8'
-                }
-            })
-            .then(data => data.text())
+            postData('http://localhost:3000/requests', json)
             .then(data => {
                 console.log(data);
                 showThanksModal(message.success);
