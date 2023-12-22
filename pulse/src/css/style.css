@@ -258,3 +258,39 @@
 .feed-form input:nth-child(3) {
   margin-bottom: 0px;
 }
+
+.carousel {
+  padding: 81px 0px;
+}
+.carousel__inner {
+  position: relative;
+  width: 750px;
+  margin: 0 auto;
+}
+.carousel .slick-prev {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  left: -66px;
+  border: none;
+  background-color: #fff;
+}
+.carousel .slick-prev img {
+  width: 31px;
+  height: 50px;
+}
+.carousel .slick-next {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  right: -66px;
+  left: auto;
+  border: none;
+  background-color: #fff;
+}
+.carousel .slick-next img {
+  width: 31px;
+  height: 50px;
+}
