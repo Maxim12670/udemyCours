@@ -18,6 +18,9 @@
   font-weight: 400;
   text-transform: uppercase;
 }
+.title_bold {
+  font-weight: 700;
+}
 
 .promo {
   min-height: 650px;
@@ -509,4 +512,36 @@
 }
 .catalog-item__back:hover {
   color: #C70101;
+}
+
+.feedback-item {
+  padding-top: 60px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.feedback-item__wrapper {
+  width: 680px;
+  padding-left: 60px;
+}
+.feedback-item__img {
+  width: 169px;
+  height: 169px;
+}
+.feedback-item__name {
+  color: #0D0D0D;
+  font-size: 18px;
+  font-weight: 700;
+}
+.feedback-item__status {
+  color: #646464;
+  font-size: 14px;
+  font-weight: 500;
+}
+.feedback-item__descr {
+  padding-top: 10px;
+  color: #0D0D0D;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 24px;
 }
